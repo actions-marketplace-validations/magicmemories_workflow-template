@@ -1,5 +1,8 @@
 name: MM Organization CI
 description: This action is a template for the aclhemy projects to run in githubactions
+branding:
+    icon: anchor
+    color: yellow
 author: 'mm'
 inputs:
     aws-secret-access-key:
