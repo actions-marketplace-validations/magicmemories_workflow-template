@@ -1,0 +1,75 @@
+name: MM Organization CI
+description: This action is a template for the aclhemy projects to run in githubactions
+author: 'mm'
+  # Docker Login
+inputs:
+    registry:
+    description: 'Server address of Docker registry. If not set then will default to Docker Hub'
+    required: false
+    username:
+      description: 'Username used to log against the Docker registry'
+      required: false
+    password:
+      description: 'Password or personal access token used to log against the Docker registry'
+      required: false
+    logout:
+      description: 'Log out from the Docker registry at the end of a job'
+      default: 'true'
+      required: false
+      
+    # Docker BuildX
+    version:
+    description: 'Buildx version. (eg. v0.3.0)'
+    required: false
+    driver:
+      description: 'Sets the builder driver to be used'
+      default: 'docker-container'
+      required: false
+    driver-opts:
+      description: 'List of additional driver-specific options. (eg. image=moby/buildkit:master)'
+      required: false
+    buildkitd-flags:
+      description: 'Flags for buildkitd daemon'
+      default: '--allow-insecure-entitlement security.insecure --allow-insecure-entitlement network.host'
+      required: false
+    install:
+      description: 'Sets up docker build command as an alias to docker buildx'
+      default: 'false'
+      required: false
+    use:
+      description: 'Switch to this builder instance'
+      default: 'true'
+      required: false
+    endpoint:
+      description: 'Optional address for docker socket or context from `docker context ls`'
+      required: false
+    
+    # Configure AWS Credentials
+    aws-access-key-id:
+    description: >-
+      AWS Access Key ID. This input is required if running in the GitHub hosted environment.
+      It is optional if running in a self-hosted environment that already has AWS credentials,
+      for example on an EC2 instance.
+    required: false
+    aws-secret-access-key:
+      description: >-
+        AWS Secret Access Key. This input is required if running in the GitHub hosted environment.
+        It is optional if running in a self-hosted environment that already has AWS credentials,
+        for example on an EC2 instance.
+      required: false
+      aws-region:
+      description: 'AWS Region, e.g. us-east-2'
+
+outputs:
+    name:
+      description: 'Builder instance name'
+    platforms:
+      description: 'Available platforms (comma separated)'
+    aws-account-id:
+      description: 'The AWS account ID for the provided credentials'
+      
+# runs:
+#     using: 'node12'
+#     main: 'dist/index.js'
+#     post: 'dist/index.js'
+      
