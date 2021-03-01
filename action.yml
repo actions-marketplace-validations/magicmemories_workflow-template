@@ -1,75 +1,58 @@
 name: MM Organization CI
 description: This action is a template for the aclhemy projects to run in githubactions
 author: 'mm'
-  # Docker Login
-inputs:
-    registry:
-    description: 'Server address of Docker registry. If not set then will default to Docker Hub'
-    required: false
-    username:
-      description: 'Username used to log against the Docker registry'
-      required: false
-    password:
-      description: 'Password or personal access token used to log against the Docker registry'
-      required: false
-    logout:
-      description: 'Log out from the Docker registry at the end of a job'
-      default: 'true'
-      required: false
-      
-    # Docker BuildX
-    version:
-    description: 'Buildx version. (eg. v0.3.0)'
-    required: false
-    driver:
-      description: 'Sets the builder driver to be used'
-      default: 'docker-container'
-      required: false
-    driver-opts:
-      description: 'List of additional driver-specific options. (eg. image=moby/buildkit:master)'
-      required: false
-    buildkitd-flags:
-      description: 'Flags for buildkitd daemon'
-      default: '--allow-insecure-entitlement security.insecure --allow-insecure-entitlement network.host'
-      required: false
-    install:
-      description: 'Sets up docker build command as an alias to docker buildx'
-      default: 'false'
-      required: false
-    use:
-      description: 'Switch to this builder instance'
-      default: 'true'
-      required: false
-    endpoint:
-      description: 'Optional address for docker socket or context from `docker context ls`'
-      required: false
-    
-    # Configure AWS Credentials
-    aws-access-key-id:
-    description: >-
-      AWS Access Key ID. This input is required if running in the GitHub hosted environment.
-      It is optional if running in a self-hosted environment that already has AWS credentials,
-      for example on an EC2 instance.
-    required: false
-    aws-secret-access-key:
-      description: >-
-        AWS Secret Access Key. This input is required if running in the GitHub hosted environment.
-        It is optional if running in a self-hosted environment that already has AWS credentials,
-        for example on an EC2 instance.
-      required: false
-      aws-region:
-      description: 'AWS Region, e.g. us-east-2'
+name: 'EKS Helm Deploy'
+description: 'Deploy a helm chart to EKS cluster.'
 
-outputs:
+inputs:
+    aws-secret-access-key:
+        description: 'AWS credentials used to login to eks.'
+        required: true
+    aws-access-key-id:
+        description: 'AWS credentials used to login to eks.'
+        required: true
+    aws-region:
+        description: 'AWS region to use (default: us-west-2)'
+        required: true
+        default: us-west-2
+    cluster-name:
+        description: 'EKS cluster name.'
+        required: true
+    cluster-role-arn:
+        description: 'EKS cluster admin role arn.'
+        required: false
+    config-files:
+        description: 'Comma separates list of helm values files.'
+        required: false
+    namespace:
+        description: 'Kubernetes namespace to use.'
+        required: false
+    values:
+        description: 'Comma separated list of value sets for helms. e.x: key1=value1,key2=value2'
+        required: false
     name:
-      description: 'Builder instance name'
-    platforms:
-      description: 'Available platforms (comma separated)'
-    aws-account-id:
-      description: 'The AWS account ID for the provided credentials'
-      
-# runs:
-#     using: 'node12'
-#     main: 'dist/index.js'
-#     post: 'dist/index.js'
-      
+        description: 'Name of the helm deploy.'
+        required: true
+    chart-path:
+        description: 'The path of the chart.'
+        required: true
+        default: 'helm/'
+    timeout:
+        description: 'Timeout for the job.'
+        required: true
+        default: 5m0s
+runs:
+    using: 'docker'
+    image: 'docker://peymanmo/eks-helm-deploy:v2'
+    env:
+        AWS_REGION: ${{ inputs.aws-region }}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret-access-key }}
+        AWS_ACCESS_KEY_ID: ${{ inputs.aws-access-key-id }}
+        CLUSTER_NAME: ${{ inputs.cluster-name }}
+        CLUSTER_ROLE_ARN: ${{ inputs.cluster-role-arn }}
+        DEPLOY_CONFIG_FILES: ${{ inputs.config-files }}
+        DEPLOY_NAMESPACE: ${{ inputs.namespace }}
+        DEPLOY_VALUES: ${{ inputs.values }}
+        DEPLOY_NAME: ${{ inputs.name }}
+        DEPLOY_CHART_PATH: ${{ inputs.chart-path }}
+        TIMEOUT: ${{ inputs.timeout }}
