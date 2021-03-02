@@ -13,7 +13,6 @@ CMD eks-help-deploy-action
 
 
 FROM mozilla/sops:v3.6.1 AS sops-decrypt
-
-COPY sops-decrypt.sh /sops-decrypt.sh
-
-ENTRYPOINT ["bash","/sops-decrypt.sh"]
+COPY sops-decrypt.sh .
+RUN chmod +x sops-decrypt.sh
+ENTRYPOINT ["./sops-decrypt.sh"]
