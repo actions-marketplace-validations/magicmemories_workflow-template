@@ -48,6 +48,8 @@ inputs:
 runs:
     using: 'docker'
     image: 'Dockerfile'
+    args:
+        - ${{ inputs.secrets-directory }}
     env:
         AWS_REGION: ${{ inputs.aws-region }}
         AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret-access-key }}
@@ -60,5 +62,4 @@ runs:
         DEPLOY_NAME: ${{ inputs.name }}
         DEPLOY_CHART_PATH: ${{ inputs.chart-path }}
         TIMEOUT: ${{ inputs.timeout }}
-    args:
-        - ${{ inputs.secrets-directory }}
+    
