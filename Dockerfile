@@ -16,4 +16,4 @@ FROM mozilla/sops:v3.6.1 AS sops-decrypt
 
 COPY sops-decrypt.sh /sops-decrypt.sh
 
-ENTRYPOINT ["/sops-decrypt.sh"]
+ENTRYPOINT ["bash","/sops-decrypt.sh"]
