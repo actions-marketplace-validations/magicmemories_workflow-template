@@ -1,6 +1,6 @@
-FROM python:3.8-slim-buster
+FROM python:3.8-slim-buster AS eks-help-deploy-action
 
-COPY action.sh /usr/local/bin/action
+COPY eks-help-deploy-action.sh /usr/local/bin/eks-help-deploy-action
 
 # Install the toolset.
 RUN apt -y update && apt -y install curl \
@@ -9,4 +9,11 @@ RUN apt -y update && apt -y install curl \
     && curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.19.0/bin/linux/amd64/kubectl \
     && chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
 
-CMD action
+CMD eks-help-deploy-action
+
+
+FROM mozilla/sops:v3.6.1 AS sops-decrypt
+
+COPY sops-decrypt.sh /sops-decrypt.sh
+
+ENTRYPOINT ["/sops-decrypt.sh"]

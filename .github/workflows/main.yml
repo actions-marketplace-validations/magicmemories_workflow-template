@@ -45,11 +45,3 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-west-2
-
-      - name: Decrypt SOPS Secrets
-        # You may pin to the exact commit or the version.
-        # uses: rmb938/sops-decrypt-action@b566d1bdf324e157c70890efda8192fd59f18945
-        uses: rmb938/sops-decrypt-action@0.1.0
-        with:
-          # The directory that contains sops encrypted secrets
-          secrets-directory: helm/test
