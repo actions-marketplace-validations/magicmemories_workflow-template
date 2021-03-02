@@ -41,6 +41,7 @@ inputs:
         description: 'Timeout for the job.'
         required: true
         default: 5m0s
+    
 runs:
     using: 'docker'
     image: 'docker://peymanmo/eks-helm-deploy:v2'
